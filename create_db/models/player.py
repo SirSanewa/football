@@ -8,13 +8,14 @@ class Player(Base):
 
     player_id = Column(Integer, autoincrement=True, primary_key=True)
     name = Column(String)
-    surname = Column(String)
     photo = Column(LargeBinary)
-    age = Column(Integer)
+    dob = Column(Integer)
     club_id = Column(Integer)
     shirt_number = Column(Integer)
     position = Column(Integer)
     nationality = Column(Integer)
-    value = Column(Float(precision=2))
+    # value = Column(Float(precision=2))
+
+    value = Column(String)
 
     club = relationship("Club")
