@@ -34,7 +34,7 @@ def get_club_link_name(club_tr) -> str:
     return " ".join(club_row)
 
 
-def use_link_and_switch_to_club_page(club, link_name: str, driver):
+def use_link_and_switch_to_club_page(club, driver):
     """
     Takes in club row WebElement and for given club name clicks appropriate link.
     Switches driver focus to new  maximized window.
@@ -43,6 +43,7 @@ def use_link_and_switch_to_club_page(club, link_name: str, driver):
     :param driver:
     :return:
     """
+    link_name = get_club_link_name(club)
     link = club.find_element_by_link_text(link_name)
     ActionChains(driver) \
         .move_to_element(link) \
@@ -69,13 +70,14 @@ def player_data(player_row) -> tuple:
     player_shirt = player_data_list[0]
     player_dob = player_data_list[2]
     player_value = player_data_list[3]
+    # TODO: ogarnąć datę urodzin i wartość (datetime i float jako wartość)
     return player_name, player_position, player_shirt, player_dob, player_value
 
 
 def get_image(driver, image_type=None, player_id=None):
     """
-    Takes in ChromeDriver. If image_type and player_id not set then None by default.
-    Requests image from image source url and returns it as binary.
+    Takes in ChromeDriver. If image_type and player_id not set then None by default, allows to get both club and players
+    image. Requests image from image source url and returns it as binary.
     :param driver:
     :param image_type:
     :param player_id:
@@ -157,8 +159,7 @@ def data_mining(driver):
 
     clubs_table = driver.find_element_by_css_selector("#yw1 > table > tbody")
     for club_id, club in enumerate(clubs_table.find_elements_by_xpath("./tr"), start=1):
-        link_club_name = get_club_link_name(club)
-        use_link_and_switch_to_club_page(club, link_club_name, driver)
+        use_link_and_switch_to_club_page(club, driver)
 
         create_new_db_club(driver, club_id)
 
